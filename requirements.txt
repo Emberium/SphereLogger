@@ -1,2 +1,6 @@
 pynput==1.3.7
+Pillow==4.0.0
+PIL>=1.1.6
 prettytable==0.7.2
+uuid==1.30
+win32gui

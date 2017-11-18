@@ -4,6 +4,8 @@
 # Written by Ember
 # https://github.com/Emberium/SphereLogger
 
+open('.gitkeeper', 'w')
+
 from SPLib import *
 
 sh = SphereShell()
