@@ -6,6 +6,9 @@ cd SphereLogger
 pip3 install -r requirements.txt
 ```
 ## Using
+```
+python3 sphere.py
+```
 Type help to get available commands
 ## Feathures
 * Send logs each 10 minutes
