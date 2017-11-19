@@ -4,9 +4,15 @@
 # Written by Ember
 # https://github.com/Emberium/SphereLogger
 
-open('.gitkeeper', 'w')
-
 from SPLib import *
 
-sh = SphereShell()
-sh.cmdloop()
+import configparser
+
+
+if __name__ == '__main__':
+
+    parser = configparser.ConfigParser()
+    parser.read('config.ini')
+
+    sh = SphereShell(config=parser)
+    sh.cmdloop()
