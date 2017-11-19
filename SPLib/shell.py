@@ -125,7 +125,7 @@ class SphereShell(cmd.Cmd):
 
     def do_exit(self, t):
         """Exit."""
-        if self.listener.thread is not None:
+        if self.listener is not None:
             print(c_green('Stopping server...'))
             self.listener.socket.close()
             self.listener.exit = True
