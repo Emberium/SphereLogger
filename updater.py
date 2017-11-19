@@ -2,6 +2,7 @@
 
 import subprocess
 import requests
+import sys
 
 
 def get_newest():
@@ -26,6 +27,10 @@ if __name__ == '__main__':
     print('[-*- Checking version information... -*-]')
 
     newest = get_newest()
+    if newest is False:
+        print('[-*- Unable to check newest version. -*-]')
+        sys.exit(0)
+
     current = get_current()
 
     if newest != current:

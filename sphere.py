@@ -16,11 +16,11 @@ if __name__ == '__main__':
     _current = updater.get_current()
     _newest = updater.get_newest()
 
-    if _current != _newest:
+    if _current != _newest and _newest:
         if input(c_magenta('Update available. Do you want to install %s version? (Y/n)' % _newest)).upper() == 'Y':
             updater.update()
 
-            print(c_magenta('Successful updated to %s'))
+            print(c_magenta('Successful updated to %s' % _newest))
             sys.exit(0)
 
     parser = configparser.ConfigParser()
