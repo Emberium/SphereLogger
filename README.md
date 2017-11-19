@@ -16,3 +16,9 @@ Type help to get available commands
 * Autorun
 * TCP Connection for real-time keylogger
 ...And more!
+## If your terminal does not support colors
+Edit config.ini parametrs
+```
+[GENERAL]
+colored = 0
+```
