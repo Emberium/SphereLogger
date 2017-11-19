@@ -19,9 +19,12 @@ class Listener(object):
         self.exit = False
 
     def listener(self):
-        while not self.exit:
+        while True:
             try:
                 self.l.acquire()
+                if self.exit:
+                    break
+
                 self.accept_conn()
 
             except:
