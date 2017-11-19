@@ -15,7 +15,7 @@ def get_newest():
 
 def get_current():
     with open('version.txt') as version_file:
-        return version_file.read()
+        return version_file.read().replace('\n', '')
 
 
 def update():
