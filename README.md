@@ -15,6 +15,8 @@ Type help to get available commands
 * Screenshosts
 * Autorun
 * TCP Connection for real-time keylogger
+* Auto update
+* Screenlogger
 ...And more!
 ## If your terminal does not support colors
 Edit config.ini parametrs
