@@ -13,6 +13,10 @@ if __name__ == '__main__':
 
     parser = configparser.ConfigParser()
     parser.read('config.ini')
-
-    sh = SphereShell(config=parser)
-    sh.cmdloop()
+    
+    try:
+        sh = SphereShell(config=parser)
+        sh.cmdloop()
+       
+    except KeyboardInterrupt:
+        print(c_green("Thanks for using Sphere Logger!"))
