@@ -22,3 +22,7 @@ Edit config.ini parametrs
 [GENERAL]
 colored = 0
 ```
+## Screenshots
+![Payload generation](screenshots/payload_generation.png)
+![TCP keylogger generation](screenshots/tcp_keylogger_generation.png)
+![Loading settings from config](screenshots/loading_settings_from_config.png)
