@@ -59,7 +59,10 @@ class SphereShell(cmd.Cmd):
                 self.listener.exit = True
                 self.listener.socket.close()
                 print(c_green('Starting listener...'))
+                print(c_green('SERVER(PORT) -> ' + port))
                 self.listener = Listener(int(port))
+                self.listener.start_listener()
+                print(c_green('Server started!'))
 
     def do_read(self, line):
         """Reads connection."""
