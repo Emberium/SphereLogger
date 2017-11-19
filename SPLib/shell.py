@@ -127,7 +127,7 @@ class SphereShell(cmd.Cmd):
         """Exit."""
         if self.listener.thread is not None:
             print(c_green('Stopping server...'))
-            self.listener.thread.stop()
+            self.listener.exit = True
 
         print(c_green('Thanks for using Sphere Logger!'))
 
