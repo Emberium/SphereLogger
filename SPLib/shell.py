@@ -9,7 +9,7 @@ from socket import gethostname, gethostbyname
 
 import cmd
 import prettytable
-
+import sys
 
 class SphereShell(cmd.Cmd):
 
@@ -125,7 +125,8 @@ class SphereShell(cmd.Cmd):
     def do_exit(self, t):
         """Exit."""
         print(c_green('Thanks for using Sphere Logger!'))
-
+        sys.exit(0)
+        
         return True
 
     def check_config(self):
