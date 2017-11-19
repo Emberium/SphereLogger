@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 
 import configparser
+import updater
+
+__version__ = updater.get_current()
 
 parser = configparser.ConfigParser()
 parser.read('config.ini')

@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+from SPLib import __version__
+
 logo = '''
                     888
                     888
@@ -13,8 +15,8 @@ logo = '''
             888
             888
 
-                Sphere Logger v1.1 (2017)
-'''
+                Sphere Logger v{} (2017)
+'''.format(__version__)
 
 template_txt = '''
 USER = '{login}'
