@@ -1,12 +1,12 @@
 # SphereLogger
 ## Install
-```
-https://github.com/Emberium/SphereLogger.git SphereLogger
+```bash
+git clone https://github.com/Emberium/SphereLogger.git SphereLogger
 cd SphereLogger
 pip3 install -r requirements.txt
 ```
 ## Using
-```
+```bash
 python3 sphere.py
 ```
 Type help to get available commands
