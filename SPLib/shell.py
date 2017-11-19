@@ -11,6 +11,7 @@ import cmd
 import prettytable
 import sys
 
+
 class SphereShell(cmd.Cmd):
 
     prompt = c_magenta('>> ')
@@ -124,9 +125,12 @@ class SphereShell(cmd.Cmd):
 
     def do_exit(self, t):
         """Exit."""
+        if self.listener.thread is not None:
+            print(c_green('Stopping server...'))
+            self.listener.thread.stop()
+
         print(c_green('Thanks for using Sphere Logger!'))
-        sys.exit(0)
-        
+
         return True
 
     def check_config(self):

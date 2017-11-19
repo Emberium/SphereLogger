@@ -15,6 +15,7 @@ class Listener(object):
         self.socket.listen(1)
         self.clients = {}
         self.conn = None
+        self.thread = None
         self.exit = False
 
     def listener(self):
@@ -30,8 +31,8 @@ class Listener(object):
                 self.l.release()
 
     def start_listener(self):
-        thread = threading.Thread(target=self.listener)
-        thread.start()
+        self.thread = threading.Thread(target=self.listener)
+        self.thread.start()
 
     def accept_conn(self):
         conn, adr = self.socket.accept()

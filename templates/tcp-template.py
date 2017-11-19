@@ -3,7 +3,6 @@ from pynput import keyboard
 from os import path
 from winreg import *
 
-
 import win32gui as w32
 import pickle
 import time
